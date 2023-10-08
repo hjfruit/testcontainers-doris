@@ -3,9 +3,8 @@ package containers
 
 import org.testcontainers.containers.BindMode
 import org.testcontainers.utility.DockerImageName
-
 import com.github.dockerjava.api.model._
-
+import org.testcontainers.containers.wait.strategy.Wait
 import testcontainers.containers.Doris._
 
 object DorisFEContainer {
@@ -56,9 +55,6 @@ final class DorisFEContainer(
       cmd
         .withName(getContainerName)
         .withHostName(hostName.getOrElse(s"${Doris.feName}-$instanceIndex"))
-        .getHostConfig
-        .withPortBindings(portsBindings: _*)
-        .withAutoRemove(true)
     )
 
   def this(
@@ -81,6 +77,8 @@ final class DorisFEContainer(
       bindings,
       hostName
     )
+    
+  
 
   override def getContainerName: String = Doris.feName + instanceIndex/* + "-" + Doris.SessionId*/
 }

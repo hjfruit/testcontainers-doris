@@ -2,8 +2,8 @@ package testcontainers.containers
 
 import org.testcontainers.containers.BindMode
 import org.testcontainers.utility.DockerImageName
-
 import com.github.dockerjava.api.model._
+import org.testcontainers.containers.wait.strategy.Wait
 
 object DorisBEContainer {
 
@@ -53,9 +53,6 @@ final class DorisBEContainer(
       cmd
         .withName(getContainerName)
         .withHostName(hostName.getOrElse(s"${Doris.beName}-$instanceIndex"))
-        .getHostConfig
-        .withPortBindings(portsBindings: _*)
-        .withAutoRemove(true)
     )
 
   def this(

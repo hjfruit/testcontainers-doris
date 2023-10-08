@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class SimpleDorisCluster {
 
-    private static final Logger log = LoggerFactory.getLogger(SimpleDorisCluster2.class);
+    private static final Logger log = LoggerFactory.getLogger(SimpleDorisCluster.class);
 
     public static void main(String[] args) {
         testDorisContainerCluster();

@@ -108,6 +108,18 @@ abstract class DorisClusterContainer(subnetIp: String) extends Startable {
   }
 
   final override def start(): Unit = {
+    fes.foreach { fe =>
+      fe.start()
+      Unreliables.retryUntilTrue(
+        Doris.StartTimeout.getSeconds.toInt,
+        TimeUnit.SECONDS,
+        () => {
+          val g = fe.execInContainer("ps", "-ef").getStdout
+          g != null && g.contains(Doris.feName)
+        }
+      )
+    }
+    
     bes.foreach { be =>
       be.start()
       Unreliables.retryUntilTrue(
@@ -120,17 +132,6 @@ abstract class DorisClusterContainer(subnetIp: String) extends Startable {
       )
     }
 
-    fes.foreach { fe =>
-      fe.start()
-      Unreliables.retryUntilTrue(
-        Doris.StartTimeout.getSeconds.toInt,
-        TimeUnit.SECONDS,
-        () => {
-          val g = fe.execInContainer("ps", "-ef").getStdout
-          g != null && g.contains(Doris.feName)
-        }
-      )
-    }
   }
 
   /**
