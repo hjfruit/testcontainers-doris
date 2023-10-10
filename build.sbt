@@ -16,10 +16,10 @@ inThisBuild(
     organizationName := "hjfruit",
     developers       := List(
       Developer(
-        id = "jxnu-liguobin",
-        name = "梦境迷离",
-        email = "dreamylost@outlook.com",
-        url = url("https://github.com/jxnu-liguobin")
+        id = "dengjian",
+        name = "dengjian",
+        email = "dengjian@hjfruit.com",
+        url = url("https://github.com/dengj888")
       )
     )
   )
@@ -28,11 +28,6 @@ inThisBuild(
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
 
-//val _zioTests = Seq(
-//  "dev.zio" %% "zio-test-magnolia" % zioVersion,
-//  "dev.zio" %% "zio-test"          % zioVersion,
-//  "dev.zio" %% "zio-test-sbt"      % zioVersion
-//)
 
 lazy val core = project
   .in(file("core"))
@@ -45,20 +40,6 @@ lazy val core = project
       "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompatVersion
     )
   )
-
-//lazy val zio = project
-//  .in(file("zio"))
-//  .settings(
-//    name                     := "testcontainers-nebula-zio",
-//    crossScalaVersions       := supportCrossVersionList,
-//    libraryDependencies ++= Seq(
-//      "ch.qos.logback"           % "logback-classic" % logbackVersion   % Test,
-//      "io.github.jxnu-liguobin" %% "zio-nebula"      % zioNebulaVersion % Provided
-//    ) ++ _zioTests.map(_ % Test),
-//    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
-//    Test / parallelExecution := false
-//  )
-//  .dependsOn(core % "compile->compile;test->test")
 
 lazy val examples = project
   .in(file("examples"))

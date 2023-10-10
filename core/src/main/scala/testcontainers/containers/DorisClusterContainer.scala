@@ -9,7 +9,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 import scala.jdk.CollectionConverters._
 
-import org.rnorth.ducttape.unreliables.Unreliables
 import org.slf4j.LoggerFactory
 import org.testcontainers.containers.{ GenericContainer, Network }
 import org.testcontainers.lifecycle.Startable
