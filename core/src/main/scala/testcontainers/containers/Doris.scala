@@ -17,10 +17,8 @@ object Doris {
   /**
    * global constants
    */
-  final val DefaultTag   = "1.2.1"
-//  final val Username     = "root"
-//  final val Password     = "root"
-  final val StartTimeout = Duration.ofSeconds(30)
+  final val DefaultTag   = "1.2.2"
+  final val StartTimeout = Duration.ofSeconds(300)
   final val StopTimeout  = 30
   final val NetworkName  = "testcontainers-doris-network"
   final val NetworkType  = "default"
@@ -37,8 +35,6 @@ object Doris {
    */
   final val feLogPath = "/opt/apache-doris/fe/log"
   final val beLogPath = "/opt/apache-doris/be/log"
-
-  // fe ==> graphd; be ==> metad
   /**
    * default fe paths
    */
@@ -48,14 +44,13 @@ object Doris {
   /**
    * default data be paths
    */
-  final val beDataPath = "/opt/apache-doris/be/storage"
+  final val beDataPath   = "/opt/apache-doris/be/storage"
   final val beInitDbPath = "/docker-entrypoint-initdb.d"
 
   /**
    * default fe http server port
    */
   final val feHttpPort = 8030
-
 
   /**
    * default fe db port
@@ -65,12 +60,12 @@ object Doris {
   /**
    * default be fe correspond port
    */
-  final val beExposedPort = 9040
+  final val beExposedPort = 8040
 
   /**
    * default be fe correspond port
    */
-  final val beFeCorrespondPort = 9010
+  final val feEditLogPort = 9010
 
   /**
    * be heart beat service port

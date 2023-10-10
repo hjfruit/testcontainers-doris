@@ -2,9 +2,11 @@ package testcontainers
 package containers
 
 import org.testcontainers.containers.BindMode
-import org.testcontainers.utility.DockerImageName
-import com.github.dockerjava.api.model._
 import org.testcontainers.containers.wait.strategy.Wait
+import org.testcontainers.utility.DockerImageName
+
+import com.github.dockerjava.api.model._
+
 import testcontainers.containers.Doris._
 
 object DorisFEContainer {
@@ -40,7 +42,7 @@ final class DorisFEContainer(
   feId: String,
   instanceIndex: Int,
   val containerIp: String,
-  val feBeCorrespondAddrs: String,
+  val feServicesStr: String,
   dockerImageName: DockerImageName,
   val portsBindings: List[PortBinding],
   val bindings: List[DorisVolume],
@@ -48,9 +50,8 @@ final class DorisFEContainer(
 ) extends BaseContainer[DorisFEContainer](dockerImageName) {
 
   this
-    .withEnv(Doris.feServices, feBeCorrespondAddrs)
+    .withEnv(Doris.feServices, feServicesStr)
     .withEnv(Doris.feId, feId)
-    .withStartupTimeout(Doris.StartTimeout)
     .withCreateContainerCmdModifier(cmd =>
       cmd
         .withName(getContainerName)
@@ -77,8 +78,6 @@ final class DorisFEContainer(
       bindings,
       hostName
     )
-    
-  
 
-  override def getContainerName: String = Doris.feName + instanceIndex/* + "-" + Doris.SessionId*/
+  override def getContainerName: String = Doris.feName + instanceIndex + "-" + Doris.SessionId
 }

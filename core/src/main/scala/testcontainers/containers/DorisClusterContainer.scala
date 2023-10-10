@@ -1,5 +1,6 @@
 package testcontainers.containers
 
+import java.time.Duration
 import java.util.{ List => JList }
 import java.util.concurrent.{ Callable, TimeUnit }
 
@@ -22,11 +23,13 @@ import testcontainers.containers.Doris.dockerClient
 
 object DorisClusterContainer {
   private val logger = LoggerFactory.getLogger(classOf[DorisClusterContainer])
+
+  final class DebianContainer() extends GenericContainer[DebianContainer]("debian")
 }
 
-abstract class DorisClusterContainer(subnetIp: String) extends Startable {
+abstract class DorisClusterContainer(subnetIp: String, singleContainerStartUpTimeOut: Duration) extends Startable {
 
-  import DorisClusterContainer.logger
+  import DorisClusterContainer._
 
   protected def gatewayIp: String = {
     if (subnetIp == null) {
@@ -61,7 +64,7 @@ abstract class DorisClusterContainer(subnetIp: String) extends Startable {
 //  protected lazy val feAddrs: String = generateIpAddrs(feIdAddrMapping.map(_._2))
 
   protected lazy val feServiceStr: String =
-    feIdAddrMapping.map(kv => s"${Doris.feName}${kv._1}:${kv._2._1}:${Doris.beFeCorrespondPort}").mkString(",")
+    feIdAddrMapping.map(kv => s"${Doris.feName}${kv._1}:${kv._2._1}:${Doris.feEditLogPort}").mkString(",")
 
   protected def generateIpAddrs(ipPortMapping: List[(String, Int)]): String =
     ipPortMapping.map(kv => s"${kv._1}:${kv._2}").mkString(",")
@@ -83,6 +86,10 @@ abstract class DorisClusterContainer(subnetIp: String) extends Startable {
   protected val bes: List[DorisBEContainer]
 
   protected val fes: List[DorisFEContainer]
+
+  protected val debian = new DebianContainer()
+    .withStartupTimeout(singleContainerStartUpTimeOut)
+    .withCreateContainerCmdModifier(cmd => cmd.withStdinOpen(true).withTty(true).getHostConfig.withAutoRemove(true))
 
   def existsRunningContainer: Boolean
 
@@ -108,30 +115,15 @@ abstract class DorisClusterContainer(subnetIp: String) extends Startable {
   }
 
   final override def start(): Unit = {
-    fes.foreach { fe =>
-      fe.start()
-      Unreliables.retryUntilTrue(
-        Doris.StartTimeout.getSeconds.toInt,
-        TimeUnit.SECONDS,
-        () => {
-          val g = fe.execInContainer("ps", "-ef").getStdout
-          g != null && g.contains(Doris.feName)
-        }
-      )
-    }
-    
-    bes.foreach { be =>
-      be.start()
-      Unreliables.retryUntilTrue(
-        Doris.StartTimeout.getSeconds.toInt,
-        TimeUnit.SECONDS,
-        () => {
-          val g = be.execInContainer("ps", "-ef").getStdout
-          g != null && g.contains(Doris.beName)
-        }
-      )
+    val osName = System.getProperty("os.name")
+    if (osName.toLowerCase().contains("mac")) {
+      debian.setPrivilegedMode(true)
+      debian.start()
+      debian.execInContainer("sysctl -w vm.max_map_count=2000000")
     }
 
+    fes.foreach(_.withStartupTimeout(singleContainerStartUpTimeOut).start())
+    bes.foreach(_.withStartupTimeout(singleContainerStartUpTimeOut).start())
   }
 
   /**
@@ -192,6 +184,8 @@ abstract class DorisClusterContainer(subnetIp: String) extends Startable {
         Doris.removeTestcontainersNetwork(dorisNetwork.getId)
       }
     } catch {
+      case e: com.github.dockerjava.api.exception.NotFoundException =>
+
       case e: Throwable =>
         logger.error("Stopped all containers failed", e)
     }

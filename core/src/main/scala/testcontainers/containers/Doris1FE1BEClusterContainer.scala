@@ -1,10 +1,12 @@
 package testcontainers.containers
 
+import java.time.Duration
+
 import scala.jdk.OptionConverters._
 
 import org.slf4j.{ Logger, LoggerFactory }
 
-object Doris1FE1FEClusterContainer {
+object Doris1FE1BEClusterContainer {
   private val logger: Logger = LoggerFactory.getLogger(classOf[DorisClusterContainer])
 }
 
@@ -17,16 +19,31 @@ object Doris1FE1FEClusterContainer {
  *   The prefix of your host path, eg: prefix/opt/apache-doris/be1/storage:/opt/apache-doris/be/storage,
  *   prefix/logs/fe1:/opt/apache-doris/fe/log
  */
-class Doris1FE1FEClusterContainer(
+class Doris1FE1BEClusterContainer(
   version: String = Doris.DefaultTag,
   absoluteHostPathPrefix: Option[String] = None,
+  singleContainerStartUpTimeOut: Duration = Doris.StartTimeout,
   subnetIp: String = "172.28.0.0/16"
-) extends DorisClusterContainer(subnetIp) {
+) extends DorisClusterContainer(subnetIp, singleContainerStartUpTimeOut) {
 
-  import Doris1FE1FEClusterContainer._
+  import Doris1FE1BEClusterContainer._
+
+  def this() = this(Doris.DefaultTag, None, Doris.StartTimeout, "172.28.0.0/16")
+  def this(version: String) = this(version, None, Doris.StartTimeout, "172.28.0.0/16")
 
   def this(version: String, absoluteBindingPath: java.util.Optional[String]) =
-    this(version, absoluteBindingPath.toScala)
+    this(version, absoluteBindingPath.toScala, Doris.StartTimeout, "172.28.0.0/16")
+
+  def this(version: String, absoluteBindingPath: java.util.Optional[String], singleContainerStartUpTimeOut: Duration) =
+    this(version, absoluteBindingPath.toScala, singleContainerStartUpTimeOut, "172.28.0.0/16")
+
+  def this(
+    version: String,
+    absoluteBindingPath: java.util.Optional[String],
+    singleContainerStartUpTimeOut: Duration,
+    subnetIp: String
+  ) =
+    this(version, absoluteBindingPath.toScala, singleContainerStartUpTimeOut, subnetIp)
 
   protected override val feIdAddrMapping: List[(String, (String, Int, Int))] =
     List(
@@ -37,13 +54,9 @@ class Doris1FE1FEClusterContainer(
     increaseLastIp(gatewayIp, 2) -> Doris.beExposedPort
   )
 
-//  override protected val feBeCorrespondIpMapping: List[(String, Int)] =
-//    List(
-//      increaseLastIp(gatewayIp, 1) -> Doris.beFeCorrespondPort
-//    )
-
   protected override val fes: List[DorisFEContainer] = {
-    val fullFeTag = s"$version-fe-x86_64"
+    val fullFeTag =
+      s"$version-fe-${if (System.getProperty("os.arch").toLowerCase().contains("arm")) "arm" else "x86_64"}"
     feIdAddrMapping.map { case (feId, addr) =>
       new DorisFEContainer(
         fullFeTag,
@@ -58,7 +71,8 @@ class Doris1FE1FEClusterContainer(
   }
 
   protected override val bes: List[DorisBEContainer] = {
-    val fullBeTag = s"$version-be-x86_64"
+    val fullBeTag =
+      s"$version-be-${if (System.getProperty("os.arch").toLowerCase().contains("arm")) "arm" else "x86_64"}"
     beIpPortMapping.map { case (ip, port) =>
       new DorisBEContainer(
         fullBeTag,

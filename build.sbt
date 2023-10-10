@@ -39,7 +39,7 @@ lazy val core = project
   .settings(
     name               := "testcontainers-doris",
     crossScalaVersions := supportCrossVersionList,
-    scalaVersion             := scala2_13Version,
+    scalaVersion       := scala2_13Version,
     libraryDependencies ++= Seq(
       "org.testcontainers"      % "testcontainers"          % testcontainersVersion,
       "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionCompatVersion
@@ -65,7 +65,7 @@ lazy val examples = project
   .settings(
     publish / skip           := true,
 //    crossScalaVersions       := Nil,
-    crossScalaVersions := supportCrossVersionList,
+    crossScalaVersions       := supportCrossVersionList,
     scalaVersion             := scala2_13Version,
     libraryDependencies ++= Seq(
       // java 11

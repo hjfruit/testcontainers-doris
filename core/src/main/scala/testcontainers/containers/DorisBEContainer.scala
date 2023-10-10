@@ -1,9 +1,10 @@
 package testcontainers.containers
 
 import org.testcontainers.containers.BindMode
-import org.testcontainers.utility.DockerImageName
-import com.github.dockerjava.api.model._
 import org.testcontainers.containers.wait.strategy.Wait
+import org.testcontainers.utility.DockerImageName
+
+import com.github.dockerjava.api.model._
 
 object DorisBEContainer {
 
@@ -37,7 +38,7 @@ object DorisBEContainer {
 
 final class DorisBEContainer(
   val containerIp: String,
-  val feBeCorrespondAddrs: String,
+  val feServicesStr: String,
   instanceIndex: Int,
   dockerImageName: DockerImageName,
   val portsBindings: List[PortBinding],
@@ -45,10 +46,12 @@ final class DorisBEContainer(
   hostName: Option[String]
 ) extends BaseContainer[DorisBEContainer](dockerImageName) {
 
+//  this.waitStrategy = Wait.forHttp("api/health")
+
   this
-    .withEnv(Doris.feServices, feBeCorrespondAddrs)
+    .withEnv(Doris.feServices, feServicesStr)
     .withEnv(Doris.beAddr, s"$containerIp:${Doris.beHeartbeatServicePort}")
-    .withStartupTimeout(Doris.StartTimeout)
+//    .withStartupTimeout(Doris.StartTimeout)
     .withCreateContainerCmdModifier(cmd =>
       cmd
         .withName(getContainerName)
@@ -74,5 +77,5 @@ final class DorisBEContainer(
       hostName
     )
 
-  override def getContainerName: String = Doris.beName + instanceIndex/* + "-" + Doris.SessionId*/
+  override def getContainerName: String = Doris.beName + instanceIndex + "-" + Doris.SessionId
 }
