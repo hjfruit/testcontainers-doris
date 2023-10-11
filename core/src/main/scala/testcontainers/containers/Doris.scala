@@ -35,6 +35,7 @@ object Doris {
    */
   final val feLogPath = "/opt/apache-doris/fe/log"
   final val beLogPath = "/opt/apache-doris/be/log"
+
   /**
    * default fe paths
    */
