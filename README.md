@@ -25,13 +25,13 @@ Support Java 8+, Scala 3, Scala 2.13 and Scala 2.12
 
 **sbt**:
 ```scala
-"io.github.hjfruit" %% "testcontainers-doris" % 'latest version'
+"io.github.jxnu-liguobin" %% "testcontainers-doris" % 'latest version'
 ```
 
 **maven**:
 ```xml
 <dependency>
-    <groupId>io.github.hjfruit</groupId>
+    <groupId>io.github.jxnu-liguobin</groupId>
     <artifactId>testcontainers-doris_2.13</artifactId>
     <version>'latest version'</version>
     <scope>test</scope>
@@ -40,7 +40,7 @@ Support Java 8+, Scala 3, Scala 2.13 and Scala 2.12
 
 **gradle**:
 ```groovy
-testImplementation group: 'io.github.hjfruit', name: 'testcontainers-doris_2.13', version: 'latest version'
+testImplementation group: 'io.github.jxnu-liguobin', name: 'testcontainers-doris_2.13', version: 'latest version'
 ```
 
 ## Usage Instructions
