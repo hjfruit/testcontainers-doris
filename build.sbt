@@ -12,8 +12,8 @@ inThisBuild(
     scalaVersion     := supportCrossVersionList.head,
     homepage         := Some(url("https://github.com/hjfruit/testcontainers-doris")),
     licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
-    organization     := "io.github.hjfruit",
-    organizationName := "hjfruit",
+    organization     := "io.github.jxnu-liguobin",
+    organizationName := "jxnu-liguobin",
     developers       := List(
       Developer(
         id = "dengjian",
