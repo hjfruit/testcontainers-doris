@@ -5,7 +5,7 @@ Testcontainers for doris
 
 
 [Badge-CI]: https://github.com/hjfruit/testcontainers-doris/actions/workflows/scala.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/jxnu-liguobin/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
+[Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
 [Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/jxnu-liguobin/testcontainers-doris/
 
 [Badge-Releases]: https://img.shields.io/nexus/r/io.github.jxnu-liguobin/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
