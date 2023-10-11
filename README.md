@@ -5,14 +5,11 @@ Testcontainers for doris
 
 
 [Badge-CI]: https://github.com/hjfruit/testcontainers-doris/actions/workflows/scala.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/hjfruit/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
-[Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/hjfruit/testcontainers-doris/
+[Badge-Snapshots]: https://img.shields.io/nexus/s/jxnu-liguobin/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
+[Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/jxnu-liguobin/testcontainers-doris/
 
-[Link-Release]: https://index.scala-lang.org/hjfruit/testcontainers-doris/testcontainers-doris
-[Badge-Release]: https://index.scala-lang.org/hjfruit/testcontainers-doris/testcontainers-doris/latest-by-scala-version.svg?platform=jvm
-
-[Badge-Releases]: https://img.shields.io/nexus/r/io.github.hjfruit/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
-[Link-Releases]: https://oss.sonatype.org/content/repositories/releases/io/github/hjfruit/testcontainers-doris_3/
+[Badge-Releases]: https://img.shields.io/nexus/r/io.github.jxnu-liguobin/testcontainers-doris_3?server=https%3A%2F%2Foss.sonatype.org
+[Link-Releases]: https://oss.sonatype.org/content/repositories/releases/io/github/jxnu-liguobin/testcontainers-doris_3/
 
 [Testcontainers](https://github.com/testcontainers/testcontainers-java)  is a Java library that supports JUnit tests, providing lightweight, throwaway instances of common databases, Selenium web browsers, or anything else that can run in a Docker container.
 
