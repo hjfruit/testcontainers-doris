@@ -1,5 +1,6 @@
 package testcontainers.containers
 
+import java.net.ServerSocket
 import java.time.Duration
 
 import scala.jdk.OptionConverters._
@@ -21,6 +22,9 @@ object Doris1FE1BEClusterContainer {
  */
 class Doris1FE1BEClusterContainer(
   version: String = Doris.DefaultTag,
+  feDBPort: Option[Int] = None,
+  feHttpPort: Option[Int] = None,
+  beHttpPort: Option[Int] = None,
   absoluteHostPathPrefix: Option[String] = None,
   singleContainerStartUpTimeOut: Duration = Doris.StartTimeout,
   subnetIp: String = "172.28.0.0/16"
@@ -28,14 +32,14 @@ class Doris1FE1BEClusterContainer(
 
   import Doris1FE1BEClusterContainer._
 
-  def this() = this(Doris.DefaultTag, None, Doris.StartTimeout, "172.28.0.0/16")
-  def this(version: String) = this(version, None, Doris.StartTimeout, "172.28.0.0/16")
+  def this() = this(Doris.DefaultTag, None, None, None, None, Doris.StartTimeout, "172.28.0.0/16")
+  def this(version: String) = this(version, None, None, None, None, Doris.StartTimeout, "172.28.0.0/16")
 
   def this(version: String, absoluteBindingPath: java.util.Optional[String]) =
-    this(version, absoluteBindingPath.toScala, Doris.StartTimeout, "172.28.0.0/16")
+    this(version, None, None, None, absoluteBindingPath.toScala, Doris.StartTimeout, "172.28.0.0/16")
 
   def this(version: String, absoluteBindingPath: java.util.Optional[String], singleContainerStartUpTimeOut: Duration) =
-    this(version, absoluteBindingPath.toScala, singleContainerStartUpTimeOut, "172.28.0.0/16")
+    this(version, None, None, None, absoluteBindingPath.toScala, singleContainerStartUpTimeOut, "172.28.0.0/16")
 
   def this(
     version: String,
@@ -43,15 +47,28 @@ class Doris1FE1BEClusterContainer(
     singleContainerStartUpTimeOut: Duration,
     subnetIp: String
   ) =
-    this(version, absoluteBindingPath.toScala, singleContainerStartUpTimeOut, subnetIp)
+    this(version, None, None, None, absoluteBindingPath.toScala, singleContainerStartUpTimeOut, subnetIp)
 
   protected override val feIdAddrMapping: List[(String, (String, Int, Int))] =
+//    List(
+//      "1" -> (increaseLastIp(gatewayIp, 1), Doris.feHttpPort, Doris.feDBPort)
+//    )
     List(
-      "1" -> (increaseLastIp(gatewayIp, 1), Doris.feHttpPort, Doris.feDBPort)
+      "1" -> (increaseLastIp(gatewayIp, 1), feHttpPort.getOrElse(getAvailablePort), feDBPort.getOrElse(
+        getAvailablePort
+      ))
     )
 
+  def getAvailablePort: Int = {
+    val socket = new ServerSocket(0)
+    val port   = socket.getLocalPort
+    socket.close()
+    port
+  }
+
   protected override val beIpPortMapping: List[(String, Int)] = List(
-    increaseLastIp(gatewayIp, 2) -> Doris.beExposedPort
+    increaseLastIp(gatewayIp, 2) -> beHttpPort.getOrElse(getAvailablePort)
+//    increaseLastIp(gatewayIp, 2) -> Doris.beExposedPort
   )
 
   protected override val fes: List[DorisFEContainer] = {

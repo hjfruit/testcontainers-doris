@@ -46,7 +46,9 @@ final class DorisBEContainer(
   hostName: Option[String]
 ) extends BaseContainer[DorisBEContainer](dockerImageName) {
 
-//  this.waitStrategy = Wait.forHttp("api/health")
+  this.waitStrategy = Wait
+    .forHttp("/api/health")
+    .forPort(Doris.beExposedPort)
 
   this
     .withEnv(Doris.feServices, feServicesStr)
@@ -78,4 +80,6 @@ final class DorisBEContainer(
     )
 
   override def getContainerName: String = Doris.beName + instanceIndex + "-" + Doris.SessionId
+
+//  this.waitStrategy = Wait.forHealthcheck()
 }

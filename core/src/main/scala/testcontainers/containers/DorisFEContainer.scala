@@ -2,7 +2,7 @@ package testcontainers
 package containers
 
 import org.testcontainers.containers.BindMode
-import org.testcontainers.containers.wait.strategy.Wait
+import org.testcontainers.containers.wait.strategy.{ HttpWaitStrategy, Wait }
 import org.testcontainers.utility.DockerImageName
 
 import com.github.dockerjava.api.model._
@@ -48,6 +48,10 @@ final class DorisFEContainer(
   val bindings: List[DorisVolume],
   hostName: Option[String]
 ) extends BaseContainer[DorisFEContainer](dockerImageName) {
+
+  this.waitStrategy = Wait
+    .forHttp("/api/health")
+    .forPort(Doris.feHttpPort)
 
   this
     .withEnv(Doris.feServices, feServicesStr)
