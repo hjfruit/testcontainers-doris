@@ -22,10 +22,11 @@ Support Java 8+, Scala 3, Scala 2.13 and Scala 2.12
 
 **sbt**:
 ```scala
-"io.github.jxnu-liguobin" %% "testcontainers-doris" % 'latest version'
+"io.github.jxnu-liguobin" %% "testcontainers-doris" % '0.0.0+13-ab677850-SNAPSHOT'
 ```
 
 **maven**:
+
 ```xml
 <dependency>
     <groupId>io.github.jxnu-liguobin</groupId>
@@ -37,7 +38,7 @@ Support Java 8+, Scala 3, Scala 2.13 and Scala 2.12
 
 **gradle**:
 ```groovy
-testImplementation group: 'io.github.jxnu-liguobin', name: 'testcontainers-doris_2.13', version: 'latest version'
+testImplementation group: 'io.github.jxnu-liguobin', name: 'testcontainers-doris_2.13', version: '0.0.0+13-ab677850-SNAPSHOT'
 ```
 
 ## Usage Instructions
